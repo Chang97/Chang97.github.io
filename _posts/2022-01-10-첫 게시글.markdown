@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "연습용 게시글"
+date:   2021-01-10 23:20:20 +0900
+categories: jekyll github blog
+
+---
+이미지 및 하이퍼링크 highlight 사용 
+
+어떻게 사용하는지는 좀 더 확인 필요할듯 함.
+
+hilight
+{% highlight ruby %}
+hello World!
+{% endhighlight %}
+
+이미지 예제 : 
+- ![Img](/assets/image/profileImage.jpg)
+
+하이퍼링크 예제 : [네이버]
+
+[네이버]: https://www.naver.com
+
