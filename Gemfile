@@ -3,4 +3,4 @@
 source "https://rubygems.org"
 gemspec
 
-gem "plainwhite", "~> 0.13"
+gem "plainwhite"
