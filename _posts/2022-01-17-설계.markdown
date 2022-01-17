@@ -1,0 +1,68 @@
+---
+layout: post
+title:  "1.Springboot&JPA를 이용한 블로그 프로젝트 시작"
+date:   2021-01-13 22:00:20 +0900
+categories: Springboot JPA Blog
+---
+## 1. Springboot & JPA & JSP 를 이용한 블로그 프로젝트를 시작하기에 앞서  사용할 환경에 대한 정리
+
+<b>화면</b> : JSP <br/>
+<b>DB</b> : MySql <br/>
+<b>Framework</b> : Springboot <br/>
+
+## 2. Springboot에서 사용할 라이브러리
+### 의존성 설정
+
+### 1. Spring Boot DevTools  
+##### 제공하는 기능은 크게 5가지이다.  
++ Property Defaults  
++ Automatic Restart  
++ Live Reload  
++ Global Settings  
++ Remote Applications  
+
+쉽게 말하면 브라우저로 전송되는 내용들에 대한 코드가 변경되면, 자동으로 어플리케이션을 재시작하여 브라우저에도 업데이트를 해주는 역할을 한다.  
+[링크]  
+
+<https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html>
+
+### 2. Lombok
+Lombok(롬복)은 Java 라이브러리로 반복되는 getter, setter, toString 등의 메서드 작성 코드를 줄여주는 코드 다이어트 라이브러리이다.  
+
+<https://projectlombok.org/>
+
+### 3. Spring Data JPA
+현재 자바 진영의 ORM 기술 표준으로, 인터페이스의 모음이다
+ 
+### 4. MySQL Driver
+ 
+### 5. Spring Security
+Spring Security는 Spring 기반의 애플리케이션의 보안(인증과 권한, 인가 등)을 담당하는 스프링 하위 프레임워크이다.
+
+ 
+### 8. Spring Web
+WEB MVC를 사용하여 웹 애플리케이션을 만드는데 필요한 스프링부트의 기본적인 요소를 가짐.
+내장형 컨테이너로 톰캣을 기본탑재하고 있다.
+
+### 10. 추가 적인 것들
+
+<https://mvnrepository.com>
+
+```xml
+<!-- JSP 템플릿 엔진 -->
+<dependency>
+  <groupId>org.apache.tomcat.embed</groupId>
+  <artifactId>tomcat-embed-jasper</artifactId>
+</dependency>
+
+<!-- JSTL -->
+<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>jstl</artifactId>
+</dependency>
+```
+<br/>
+
+[출처]
+<https://getinthere.tistory.com/16?category=884180>
+

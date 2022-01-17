@@ -1,68 +1,115 @@
 ---
 layout: post
-title:  "1.Springboot&JPA를 이용한 블로그 프로젝트 시작"
-date:   2021-01-13 22:00:20 +0900
+title:  "2.Springboot&JPA ENTITY 작성"
+date:   2021-01-17 22:00:20 +0900
 categories: Springboot JPA Blog
 ---
-## 1. Springboot & JPA & JSP 를 이용한 블로그 프로젝트를 시작하기에 앞서  사용할 환경에 대한 정리
+## 1. 테이블(JPA ENTITY)
 
-<b>화면</b> : JSP <br/>
-<b>DB</b> : MySql <br/>
-<b>Framework</b> : Springboot <br/>
+#### 1. 메뉴 관리를 위한 메뉴 테이블 (진행중 필요시 생성)
 
-## 2. Springboot에서 사용할 라이브러리
-### 의존성 설정
+#### 2. 게시글 테이블
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder // 빌더 패턴
+@Entity
+public class Board {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment (시퀀스)
+	private int id;
 
-### 1. Spring Boot DevTools  
-##### 제공하는 기능은 크게 5가지이다.  
-+ Property Defaults  
-+ Automatic Restart  
-+ Live Reload  
-+ Global Settings  
-+ Remote Applications  
+	@Column(nullable = false, length = 100, unique = true) // 제목
+	private String title;
 
-쉽게 말하면 브라우저로 전송되는 내용들에 대한 코드가 변경되면, 자동으로 어플리케이션을 재시작하여 브라우저에도 업데이트를 해주는 역할을 한다.  
-[링크]  
+	@Lob
+	private String content; // 섬머노트 라이브러리 <html> 태그가 섞여서 디자인이 됨.
 
-<https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html>
+	private int count; // 조회수
+	
+	@Column(nullable = false)	
+	private String menuId;
 
-### 2. Lombok
-Lombok(롬복)은 Java 라이브러리로 반복되는 getter, setter, toString 등의 메서드 작성 코드를 줄여주는 코드 다이어트 라이브러리이다.  
+	@ManyToOne(fetch = FetchType.EAGER) // Many = Board, User = one
+	@JoinColumn(name = "userId")
+	private User user; // DB는 오브젝트를 저장할 수 없다.FK, 자바는 오브젝트를 저장할 수 있다.
 
-<https://projectlombok.org/>
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계의 주인이 아니다.(컬럼 만들지 않음)
+	@JsonIgnoreProperties({ "board" })
+	@OrderBy("id asc")
+	private List<Reply> replys;
 
-### 3. Spring Data JPA
-현재 자바 진영의 ORM 기술 표준으로, 인터페이스의 모음이다
- 
-### 4. MySQL Driver
- 
-### 5. Spring Security
-Spring Security는 Spring 기반의 애플리케이션의 보안(인증과 권한, 인가 등)을 담당하는 스프링 하위 프레임워크이다.
+	@CreationTimestamp
+	private Timestamp createDate;
+	
+}
 
- 
-### 8. Spring Web
-WEB MVC를 사용하여 웹 애플리케이션을 만드는데 필요한 스프링부트의 기본적인 요소를 가짐.
-내장형 컨테이너로 톰캣을 기본탑재하고 있다.
-
-### 10. 추가 적인 것들
-
-<https://mvnrepository.com>
-
-```xml
-<!-- JSP 템플릿 엔진 -->
-<dependency>
-  <groupId>org.apache.tomcat.embed</groupId>
-  <artifactId>tomcat-embed-jasper</artifactId>
-</dependency>
-
-<!-- JSTL -->
-<dependency>
-  <groupId>javax.servlet</groupId>
-  <artifactId>jstl</artifactId>
-</dependency>
 ```
-<br/>
-
-[출처]
-<https://getinthere.tistory.com/16?category=884180>
+#### 3. 회원 테이블
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder // 빌더 패턴
+@Entity //User 클래스가 MySql에 테이블이 생성된다.
+//@DynamicInsert //insert시에 null인 필드 제외
+public class User {
+	
+	@Id //primary key
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //프로젝트에서 연결된 db에 넘버링 전략을 따라감
+	private int id;
+	
+	@Column(nullable = false, length=30, unique = true)
+	private String username; //아이디
+	
+	@Column(nullable = false, length=300)
+	private String password; //해쉬로 암호화 하기 떄문에 넉넉하게 작성
+	
+	@Column(nullable = false, length=50)
+	private String email;
+	
+	//@ColumnDefault("'user'")
+	// DB는 RoleType이 없다.
+	@Enumerated(EnumType.STRING)
+	private RoleType role; //enum 사용하는게 좋음.//admin, user
+	
+	private String oauth; //kakao, google
+	
+	@CreationTimestamp //시간이 자동으로 입력
+	private Timestamp createDate;	
+}
+```
+#### 4. 댓글 테이블
+```java
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+@ToString(exclude = "board")
+public class Reply {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(nullable = false, length = 200)
+	private String content;
+	
+	@Column
+	private String prntContent;
+	
+	@ManyToOne
+	@JoinColumn(name = "boardId")
+	private Board board;
+	
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
+	
+	@CreationTimestamp
+	private Timestamp createDate;
+	
+}
+```
 
