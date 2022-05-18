@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "기본지식"
+date:   2022-05-18 22:41:20 +0900
+categories: 알고리즘
+---
+
+<hr>
+
+
+# 기본지식
+
+## 입출력
+
+Python에서는 input() 함수를 통해 한 줄씩 입력받는다.  한 줄을 통째로 입력받으므로 쪼갤 필요가 있을 때는 split() 함수를 사용한다. 입력받은 결과는 string이기 때문에 정수로 변환할 필요가 있는 경우에는 int() 함수를 사용한다.
+
+```python
+name = input() #1000
+n = int(input()) # 100
+a, b = map(int, input().split()) # 11 12
+# n, a, b는 int형으로 받는다.
+print(name,n,a,b)
+>>> 1000
+>>> 100
+>>> 11
+>>> 12
+```
+
+## 빠른 입출력
+
+입출력 데이터의 수가 10,000개 이상으로 너무 많다면 빠른 입출력 함수를 사용해야 한다.
+
+파이썬은 input() 대신 sys.stdin.readline()을 사용하면된다.
+
+수 십만 개의 데이터를 받을지라도 한 줄에 주어지는 거라면 input()을 한 번만 호출해도 되므로 굳이 빠른 입출력이 필요없다.
+
+```python
+import sys
+
+input = sys.stdin.readline
+
+for _ in range(100000) :
+	n = input
+	# ...
+```
+
+## 리스트 컴프리핸션 (List Comprehension)
+
+리스트를 생성할 때 어떤 반복적인 값으로 초기화 할 때 리스트 컴프리헨션을 사용한다.
+
+```python
+a1 = [3] * 8
+a2 = [3 for i in range(8)]
+
+print(a1) # [3, 3, 3, 3, 3, 3, 3, 3]
+print(a2) # [3, 3, 3, 3, 3, 3, 3, 3]
+
+b1 = [*range(8)]
+b2 = [i for i in range(8)]
+print(b1) # [0, 1, 2, 3, 4, 5, 6, 7]
+print(b2) # [0, 1, 2, 3, 4, 5, 6, 7]
+
+c = [i + 10 for i in range(8)]
+print(c) # [10, 11, 12, 13, 14, 15, 16, 17]
+
+d = [i ** 2 for i in range(8)]
+print(d) # [0, 1, 4, 9, 16, 25, 36, 49]
+
+e1 = [[1] * 4] * 3 # 이 방법으로 다차원 배열 생성은 권장하지 않음
+e2 = [[1] * 4 for _ in range(3)]
+e3 = [[1 for _ in range(4)] for _ in range(3)] 
+print(e1) # [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]
+print(e2) # [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]
+print(e3) # [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]
+```
+
+## 삼항 연산자
+
+```python
+a = [2, 4, 7, 5, 1, 8, 6, 3]
+
+for i in a:
+    even_or_odd = '짝' if i % 2 == 0 else '홀'
+		# 참 if (조건문) else 거짓
+    print(i, even_or_odd)
+
+b = [1 if j % 2 else 0 for j in a]
+print(b)
+
+>>>
+2 짝
+4 짝
+7 홀
+5 홀
+1 홀
+8 짝
+6 짝
+3 홀
+[0, 0, 1, 1, 1, 0, 0, 1]
+```
